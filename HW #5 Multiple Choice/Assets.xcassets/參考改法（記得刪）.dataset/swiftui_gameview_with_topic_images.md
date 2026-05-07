@@ -1,11 +1,118 @@
-//
-//  GameView.swift
-//  HW #5 Multiple Choice
-//
-//  Created by 114-2Workshop12 on 2026/5/7.
-//
+# SwiftUI 題目圖片版 GameView
 
+下面這個版本會：
 
+- 在 GameView 上方新增圖片區塊
+- 圖片有：
+  - 圓角
+  - 陰影
+- 根據不同題目主題自動切換照片
+
+---
+
+# 第一步：修改 Question.swift
+
+你現在的 Question 結構只有：
+
+```swift
+struct Question {
+    let text: String
+    let options: [String]
+    let correctAnswer: String
+}
+```
+
+改成下面這個版本：
+
+```swift
+import Foundation
+
+struct Question {
+
+    let text: String
+    let options: [String]
+    let correctAnswer: String
+
+    // 新增主題分類
+    let category: String
+
+    // 新增圖片名稱
+    let imageName: String
+}
+```
+
+---
+
+# 第二步：修改 QuestionProvider.swift
+
+每一題新增：
+
+- category
+- imageName
+
+例如：
+
+```swift
+Question(
+    text: "四行程引擎的運作循環順序為何？",
+    options: ["進氣-壓縮-動力-排氣", "進氣-動力-壓縮-排氣", "進氣-排氣-壓縮-動力", "壓縮-進氣-動力-排氣"],
+    correctAnswer: "進氣-壓縮-動力-排氣",
+    category: "Engine",
+    imageName: "engine"
+)
+```
+
+再例如：
+
+```swift
+Question(
+    text: "CVT 無段變速箱主要是靠什麼來改變傳動比？",
+    options: ["齒輪組換檔", "鋼帶與普利盤幅徑", "離合器片摩擦", "扭力轉換器"],
+    correctAnswer: "鋼帶與普利盤幅徑",
+    category: "Transmission",
+    imageName: "cvt"
+)
+```
+
+ADAS 題目：
+
+```swift
+Question(
+    text: "ADAS 中的 ACC 系統是指什麼功能？",
+    options: ["自動煞車", "主動式車距調節巡航", "車道偏移輔助", "盲點偵測"],
+    correctAnswer: "主動式車距調節巡航",
+    category: "ADAS",
+    imageName: "adas"
+)
+```
+
+---
+
+# 第三步：把圖片放進 Assets
+
+Xcode 左邊：
+
+```text
+Assets.xcassets
+```
+
+新增圖片：
+
+- engine
+- cvt
+- adas
+- suspension
+- hybrid
+
+圖片名稱一定要和 imageName 一樣。
+
+---
+
+# 第四步：完整 GameView.swift
+
+直接用下面這份。
+
+```swift
 import SwiftUI
 
 struct GameView: View {
@@ -28,8 +135,20 @@ struct GameView: View {
 
         VStack(spacing: 20) {
 
-            // 安全檢查
             if currentIndex < questions.count {
+
+                // MARK: - 題目圖片區
+
+                Image(questions[currentIndex].imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 320, height: 180)
+                    .clipped()
+                    .cornerRadius(20)
+                    .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 5)
+                    .padding(.top)
+
+                // MARK: - 題目資訊
 
                 VStack(spacing: 10) {
 
@@ -43,6 +162,11 @@ struct GameView: View {
                             .bold()
                     }
 
+                    // 顯示主題
+                    Text("主題：\(questions[currentIndex].category)")
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+
                     Text(feedbackText)
                         .font(.title3)
                         .bold()
@@ -53,16 +177,18 @@ struct GameView: View {
                         )
                         .frame(height: 30)
                 }
-                .padding()
+                .padding(.horizontal)
 
-                // 題目
+                // MARK: - 題目
+
                 Text(questions[currentIndex].text)
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding()
-                    .frame(minHeight: 120)
+                    .frame(minHeight: 100)
 
-                // 選項
+                // MARK: - 選項
+
                 VStack(spacing: 12) {
 
                     ForEach(shuffledOptions, id: \.self) { option in
@@ -84,13 +210,14 @@ struct GameView: View {
                                     ? .white
                                     : .primary
                                 )
-                                .cornerRadius(10)
+                                .cornerRadius(12)
                         }
                     }
                 }
                 .padding(.horizontal)
 
-                // 下一題
+                // MARK: - 下一題按鈕
+
                 if isShowingAnswer {
 
                     Button {
@@ -105,10 +232,10 @@ struct GameView: View {
                             : "查看結果"
                         )
                         .bold()
-                        .frame(width: 150, height: 45)
+                        .frame(width: 160, height: 50)
                         .background(Color.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                     }
                     .padding(.top, 20)
                 }
@@ -161,9 +288,7 @@ struct GameView: View {
             if streakCount >= 3 {
 
                 score += 30
-                feedbackText = """
-                    太厲害了，連對三題 +30
-                    """
+                feedbackText = "太厲害了 +30"
 
             } else {
 
@@ -175,7 +300,7 @@ struct GameView: View {
 
             score -= 10
             streakCount = 0
-            feedbackText = "真是太可惜，再接再厲"
+            feedbackText = "真是太可惜了，再接再厲"
         }
     }
 
@@ -213,14 +338,31 @@ struct GameView: View {
             .shuffled()
     }
 }
+```
 
-#Preview {
+---
 
-    GameView(
-        questions: Array(
-            QuestionProvider.allQuestions.prefix(10)
-        ),
-        score: .constant(0),
-        onFinish: {}
-    )
-}
+# 建議圖片主題
+
+你可以準備這些圖片：
+
+| 主題 | 圖片名稱 |
+|---|---|
+| 引擎 | engine |
+| CVT | cvt |
+| 懸吊 | suspension |
+| ADAS | adas |
+| 油電 | hybrid |
+
+---
+
+# 完成後效果
+
+你的 App 會變成：
+
+- 每題上方都有不同照片
+- 題目會依主題切換圖片
+- UI 更像真正測驗 App
+- 有卡片感
+- 圓角 + 陰影更有質感
+
