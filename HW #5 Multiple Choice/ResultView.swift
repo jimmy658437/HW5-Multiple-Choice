@@ -12,22 +12,54 @@ struct ResultView: View {
     let finalScore: Int
     let onRestart: () -> Void
     var body: some View {
-        VStack(spacing: 25) {
-            Text("測驗結束")
-                .font(.title)
-            Text("\(finalScore)")
-                .font(.system(size: 100, weight: .black))
-                .foregroundColor(finalScore >= 100 ? .green : .red)
-            Text("最終得分")
+        
+        ZStack {
+            //背景加模糊
+            Image(.resultBackground)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .blur(radius: 10)
+                .offset(x: -250)
             
-            Button(action: onRestart) {
-                Text("再玩一次")
-                    .bold()
-                    .padding()
-                    .frame(width: 150)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            //白色遮罩
+            Color.white.opacity(0.7)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 70) {
+                VStack(alignment: .leading, spacing: 14) {
+                    
+                    Text("最終得分")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(.accent)
+                    Text("\(finalScore)")
+                        .font(.system(size: 100, weight: .black))
+                        .foregroundColor(finalScore >= 100 ? .green : .red)
+                    
+                }
+                .frame(width: 300, height: 200)
+                .padding(5)
+                .background(.thinMaterial)
+                .cornerRadius(22)
+                .padding(.horizontal)
+                .shadow(color: .black.opacity(0.1),
+                        radius: 10,
+                        x: 0,
+                        y: 3
+                )
+                
+                
+                Button(action: onRestart) {
+                    Text("再玩一次")
+                        .padding()
+                        .font(.title2).bold()
+                        .frame(width: 200, height: 60)
+                        .glassEffect(.clear)
+                        .background(Capsule().fill(.accent))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
     }

@@ -13,21 +13,35 @@ struct StartView: View {
     var body: some View {
         
         ZStack {
+            //背景加模糊
             Image(.startBackground)
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
                 .blur(radius: 10)
-            Color.white.opacity(0.5)
+            //白色遮罩
+            Color.white.opacity(0.7)
                 .ignoresSafeArea()
-            VStack(spacing: 30) {
-                Image(systemName: "car.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.blue)
-                Text("汽車知識測驗")
-                    .font(.largeTitle).bold()
-                Text("挑戰 10 題專業知識")
-                    .font(.subheadline)
+            
+            VStack(spacing: 80) {
+                VStack{
+                    Text("汽車知識測驗")
+                        .font(.largeTitle)
+                        .bold()
+                    
+                    Image(.startPhoto)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 230)
+                        .cornerRadius(16)
+                        .shadow(
+                            color: .black.opacity(0.12),
+                            radius: 6,
+                            x: 0,
+                            y: 3
+                        )
+                }
+                
                 Button(action: onStart) {
                     Text("開始遊戲")
                         .font(.title2).bold()
@@ -37,6 +51,7 @@ struct StartView: View {
                         .cornerRadius(15)
                 }
             }
+            .offset(y:-20)
         }
     }
 }

@@ -43,7 +43,7 @@ struct ContentView: View {
 
     func startNewGame() {
 
-        // 從 35 題亂數抽 10 題
+        // 從題庫亂數抽 10 題
         currentQuestions = Array(
             QuestionProvider.allQuestions
                 .shuffled()
