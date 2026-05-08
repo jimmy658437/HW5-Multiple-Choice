@@ -27,14 +27,14 @@ struct ResultView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 70) {
-                VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .center, spacing: 14) {
                     
                     Text("最終得分")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(.accent)
                     Text("\(finalScore)")
-                        .font(.system(size: 100, weight: .black))
+                        .font(.system(size: 80, weight: .black))
                         .foregroundColor(finalScore >= 100 ? .green : .red)
                     
                 }

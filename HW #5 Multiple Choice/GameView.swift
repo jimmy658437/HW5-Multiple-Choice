@@ -5,7 +5,6 @@
 //  Created by 114-2Workshop12 on 2026/5/7.
 //
 
-
 import SwiftUI
 
 struct GameView: View {
@@ -29,14 +28,15 @@ struct GameView: View {
         ZStack {
 
             //背景
-            Color(
-                red: 0.95,
-                green: 0.97,
-                blue: 0.98
+            LinearGradient(
+                colors: [
+                    .background,
+                    .accent.opacity(0.3),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            
-
 
             if currentIndex < questions.count {
 
@@ -57,10 +57,21 @@ struct GameView: View {
                             Spacer()
 
                             // 分數
+
                             Text("分數：\(score)")
                                 .font(.headline)
-                                .foregroundColor(
-                                    Color(.accent)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.accentColor)
+                                        .shadow(
+                                            color: .black.opacity(0.2),
+                                            radius: 8,
+                                            x: 0,
+                                            y: 4
+                                        )
                                 )
                         }
 
@@ -118,10 +129,11 @@ struct GameView: View {
                     .background(Color.white)
                     .cornerRadius(22)
                     .padding(.horizontal)
-                    .shadow(color: .black.opacity(0.05),
-                            radius: 10,
-                            x: 0,
-                            y: 3
+                    .shadow(
+                        color: .black.opacity(0.05),
+                        radius: 10,
+                        x: 0,
+                        y: 3
                     )
 
                     // 選項
@@ -145,22 +157,18 @@ struct GameView: View {
                                         .font(.headline.bold())
                                         .foregroundColor(
                                             selectedOption == option
-                                            ? .white
-                                            : Color(Color(.accent))
+                                                ? .white
+                                                : Color(Color(.accent))
                                         )
-                                        .frame(width: 40, height: 40)
+                                        .frame(width: 35, height: 35)
                                         .background(
                                             selectedOption == option
-                                            ? Color(
-                                                red: 0.25,
-                                                green: 0.4,
-                                                blue: 0.48
-                                            )
-                                            : Color(
-                                                red: 0.88,
-                                                green: 0.92,
-                                                blue: 0.95
-                                            )
+                                                ? Color(.accent)
+                                                : Color(
+                                                    red: 0.88,
+                                                    green: 0.92,
+                                                    blue: 0.95
+                                                )
                                         )
                                         .cornerRadius(10)
 
@@ -196,7 +204,7 @@ struct GameView: View {
                                     )
                                     .stroke(
                                         borderColor(for: option),
-                                        lineWidth: 5
+                                        lineWidth: 2
                                     )
                                 )
                                 .cornerRadius(16)
@@ -212,8 +220,8 @@ struct GameView: View {
                             .font(.subheadline.bold())
                             .foregroundColor(
                                 feedbackText.contains("可惜")
-                                ? .red
-                                : .green
+                                    ? .red
+                                    : .green
                             )
                     }
 
@@ -230,20 +238,14 @@ struct GameView: View {
 
                             Text(
                                 currentIndex < questions.count - 1
-                                ? "下一題"
-                                : "查看結果"
+                                    ? "下一題"
+                                    : "查看結果"
                             )
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 52)
-                            .background(
-                                Color(
-                                    red: 0.25,
-                                    green: 0.4,
-                                    blue: 0.48
-                                )
-                            )
+                            .background(Color(.accent))
                             .cornerRadius(16)
                         }
                         .padding(.horizontal)
