@@ -55,11 +55,11 @@ struct ResultView: View {
                         .padding()
                         .font(.title2).bold()
                         .frame(width: 200, height: 60)
-                        .glassEffect(.clear)
-                        .background(Capsule().fill(.accent))
+//                        .background(Capsule().fill(.accent))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
+                .buttonStyle(.glassProminent)
             }
         }
     }

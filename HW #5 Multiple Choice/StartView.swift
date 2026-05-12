@@ -46,10 +46,10 @@ struct StartView: View {
                     Text("開始遊戲")
                         .font(.title2).bold()
                         .frame(width: 200, height: 60)
-                        .glassEffect(.clear)
                         .foregroundColor(.black)
                         .cornerRadius(15)
                 }
+                .buttonStyle(.glass)
             }
             .offset(y:-20)
         }

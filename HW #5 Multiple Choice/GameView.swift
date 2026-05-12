@@ -243,11 +243,11 @@ struct GameView: View {
                             )
                             .font(.headline)
                             .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(Color(.accent))
+                            .frame(maxWidth: 200)
+                            .frame(height: 45)
                             .cornerRadius(16)
                         }
+                        .buttonStyle(.glassProminent)
                         .padding(.horizontal)
                     }
                 }
